@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="xlr8login">
+  <schema id="org.gnome.shell.extensions.xlr8login" path="/org/gnome/shell/extensions/xlr8login/">
+    <key name="enabled" type="b">
+      <default>true</default>
+      <summary>Enable auto-submit</summary>
+      <description>When enabled, the password field is submitted automatically after the configured number of characters.</description>
+    </key>
+    <key name="auto-submit-length" type="i">
+      <default>4</default>
+      <range min="4" max="32"/>
+      <summary>Auto-submit length</summary>
+      <description>Number of characters after which the password field is submitted automatically.</description>
+    </key>
+    <key name="digits-only" type="b">
+      <default>false</default>
+      <summary>Digits only</summary>
+      <description>When enabled, non-digit keystrokes are ignored in the password field (PIN-like typing).</description>
+    </key>
+  </schema>
+</schemalist>

@@ -1,0 +1,9 @@
+*.tar.gz
+*.shell-extension.zip
+extension/schemas/gschemas.compiled
+build/
+_destdir/
+.rpmbuild/
+*.rpm
+*~
+*.swp

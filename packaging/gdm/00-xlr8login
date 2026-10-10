@@ -1,0 +1,9 @@
+# Enable xlr8login on the GDM greeter (login screen).
+# Installed to /usr/share/xlr8login/00-xlr8login and applied by
+# `xlr8login-enable-gdm` into /etc/dconf/db/gdm.d/.
+#
+# Note: this sets enabled-extensions for the greeter. If you already
+# customize that key, merge UUIDs manually instead of overwriting.
+
+[org/gnome/shell]
+enabled-extensions=['xlr8login@xlr8login']

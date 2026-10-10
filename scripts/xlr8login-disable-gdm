@@ -1,0 +1,20 @@
+#!/usr/bin/bash
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Disable the xlr8login extension on the GDM login screen.
+set -euo pipefail
+
+DEST='/etc/dconf/db/gdm.d/00-xlr8login'
+
+if [[ ${EUID} -ne 0 ]]; then
+    echo "Run as root: sudo $0" >&2
+    exit 1
+fi
+
+if [[ -f ${DEST} ]]; then
+    rm -f "${DEST}"
+    dconf update
+    echo "Removed ${DEST}."
+    echo "Restart GDM to apply: sudo systemctl restart gdm"
+else
+    echo "No GDM dconf fragment at ${DEST} (already disabled)."
+fi

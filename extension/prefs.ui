@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="xlr8login">
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="adw" version="1.0"/>
+  <object class="AdwPreferencesPage" id="page">
+    <property name="title" translatable="yes">xlr8login</property>
+    <property name="icon-name">dialog-password-symbolic</property>
+    <child>
+      <object class="AdwPreferencesGroup">
+        <property name="title" translatable="yes">Auto-submit</property>
+        <property name="description" translatable="yes">Phase 1 submits your account password when the field reaches the configured length. Set the length to match your password. A separate PIN credential is planned for Phase 2.</property>
+        <child>
+          <object class="AdwSwitchRow" id="enabled_row">
+            <property name="title" translatable="yes">Enable auto-submit</property>
+            <property name="subtitle" translatable="yes">Submit automatically after the configured number of characters</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwSpinRow" id="length_row">
+            <property name="title" translatable="yes">Character count</property>
+            <property name="subtitle" translatable="yes">Number of characters before auto-submit (4–32)</property>
+            <property name="adjustment">length_adjustment</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwSwitchRow" id="digits_row">
+            <property name="title" translatable="yes">Digits only</property>
+            <property name="subtitle" translatable="yes">Ignore non-digit keystrokes in the password field</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwPreferencesGroup">
+        <property name="title" translatable="yes">Safety</property>
+        <property name="description" translatable="yes">After three consecutive failed auto-submits, auto-submit pauses until a successful unlock or you toggle the setting. Pressing Enter always works.</property>
+        <child>
+          <object class="AdwActionRow">
+            <property name="title" translatable="yes">Manual Enter is never disabled</property>
+            <property name="subtitle" translatable="yes">You can always press Enter to submit, even when auto-submit is paused</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkAdjustment" id="length_adjustment">
+    <property name="lower">4</property>
+    <property name="upper">32</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">1</property>
+  </object>
+</interface>

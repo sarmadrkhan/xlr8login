@@ -1,0 +1,38 @@
+#!/usr/bin/bash
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Enable the xlr8login extension on the GDM login screen.
+set -euo pipefail
+
+UUID='xlr8login@xlr8login'
+SRC='/usr/share/xlr8login/00-xlr8login'
+DEST_DIR='/etc/dconf/db/gdm.d'
+DEST="${DEST_DIR}/00-xlr8login"
+
+if [[ ${EUID} -ne 0 ]]; then
+    echo "Run as root: sudo $0" >&2
+    exit 1
+fi
+
+if [[ ! -f ${SRC} ]]; then
+    # Allow running from a source/checkout install.
+    REPO_SRC="$(cd "$(dirname "$0")/.." && pwd)/packaging/gdm/00-xlr8login"
+    if [[ -f ${REPO_SRC} ]]; then
+        SRC=${REPO_SRC}
+    else
+        echo "Missing ${SRC}. Install the xlr8login package first." >&2
+        exit 1
+    fi
+fi
+
+if [[ ! -d /usr/share/gnome-shell/extensions/${UUID} ]]; then
+    echo "Extension not installed system-wide at /usr/share/gnome-shell/extensions/${UUID}" >&2
+    echo "Run: sudo make install   (or install the RPM)" >&2
+    exit 1
+fi
+
+install -d "${DEST_DIR}"
+install -m 644 "${SRC}" "${DEST}"
+dconf update
+echo "Enabled ${UUID} for GDM greeter (${DEST})."
+echo "Restart GDM to apply: sudo systemctl restart gdm"
+echo "Warning: restarting GDM closes graphical sessions."

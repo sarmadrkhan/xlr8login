@@ -1,0 +1,12 @@
+{
+  "uuid": "xlr8login@xlr8login",
+  "name": "xlr8login",
+  "description": "Auto-submit the GNOME login and lock-screen password field after a configurable number of characters (Windows PIN-style). Phase 1 submits your account password when its length matches N; a real separate PIN is planned for Phase 2.",
+  "shell-version": ["47", "48", "49", "50"],
+  "session-modes": ["user", "unlock-dialog", "gdm"],
+  "url": "https://github.com/xlr8login/xlr8login",
+  "settings-schema": "org.gnome.shell.extensions.xlr8login",
+  "gettext-domain": "xlr8login",
+  "version": 1,
+  "version-name": "0.1.0"
+}
