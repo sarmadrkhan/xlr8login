@@ -2,7 +2,7 @@
 
 UUID := xlr8login@xlr8login
 NAME := xlr8login
-VERSION := 0.1.0
+VERSION := 0.2.0
 
 PREFIX ?= /usr
 DATADIR := $(PREFIX)/share
@@ -34,6 +34,8 @@ install: schemas
 	install -d $(DESTDIR)$(BINDIR)
 	install -m 755 scripts/xlr8login-enable-gdm $(DESTDIR)$(BINDIR)/xlr8login-enable-gdm
 	install -m 755 scripts/xlr8login-disable-gdm $(DESTDIR)$(BINDIR)/xlr8login-disable-gdm
+	# World-traversable sticky dir so each user can write <user>.json for the GDM greeter.
+	install -d -m 1777 $(DESTDIR)/var/lib/xlr8login
 	@if [ -z "$(DESTDIR)" ]; then \
 		glib-compile-schemas $(SCHEMADIR); \
 	fi

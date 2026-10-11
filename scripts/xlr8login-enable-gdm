@@ -4,7 +4,6 @@
 set -euo pipefail
 
 UUID='xlr8login@xlr8login'
-SRC='/usr/share/xlr8login/00-xlr8login'
 DEST_DIR='/etc/dconf/db/gdm.d'
 DEST="${DEST_DIR}/00-xlr8login"
 
@@ -13,26 +12,46 @@ if [[ ${EUID} -ne 0 ]]; then
     exit 1
 fi
 
-if [[ ! -f ${SRC} ]]; then
-    # Allow running from a source/checkout install.
-    REPO_SRC="$(cd "$(dirname "$0")/.." && pwd)/packaging/gdm/00-xlr8login"
-    if [[ -f ${REPO_SRC} ]]; then
-        SRC=${REPO_SRC}
-    else
-        echo "Missing ${SRC}. Install the xlr8login package first." >&2
-        exit 1
-    fi
-fi
-
 if [[ ! -d /usr/share/gnome-shell/extensions/${UUID} ]]; then
     echo "Extension not installed system-wide at /usr/share/gnome-shell/extensions/${UUID}" >&2
     echo "Run: sudo make install   (or install the RPM)" >&2
     exit 1
 fi
 
+# Merge with any existing greeter enabled-extensions list.
+EXISTING=()
+if [[ -f ${DEST} ]]; then
+    # shellcheck disable=SC2207
+    EXISTING=($(sed -n "s/.*enabled-extensions=\[\(.*\)\]/\1/p" "${DEST}" | tr -d "'" | tr ',' ' '))
+fi
+
+MERGED=("${UUID}")
+for ext in "${EXISTING[@]:-}"; do
+    [[ -z ${ext} || ${ext} == "${UUID}" ]] && continue
+    MERGED+=("${ext}")
+done
+
+LIST=""
+for ext in "${MERGED[@]}"; do
+    if [[ -n ${LIST} ]]; then
+        LIST+=", "
+    fi
+    LIST+="'${ext}'"
+done
+
 install -d "${DEST_DIR}"
-install -m 644 "${SRC}" "${DEST}"
+cat > "${DEST}" <<EOF
+# Managed by xlr8login-enable-gdm — enables auto-submit on the login screen.
+[org/gnome/shell]
+enabled-extensions=[${LIST}]
+EOF
+
 dconf update
 echo "Enabled ${UUID} for GDM greeter (${DEST})."
 echo "Restart GDM to apply: sudo systemctl restart gdm"
 echo "Warning: restarting GDM closes graphical sessions."
+echo
+echo "Per-user length/settings are read from:"
+echo "  /var/lib/xlr8login/<username>.json"
+echo "(written automatically when the extension runs in your session)."
+install -d -m 1777 /var/lib/xlr8login

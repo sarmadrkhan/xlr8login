@@ -1,5 +1,5 @@
 project('xlr8login',
-  version: '0.1.0',
+  version: '0.2.0',
   meson_version: '>= 0.61.0',
   license: 'GPL-2.0-or-later',
 )
@@ -7,6 +7,7 @@ project('xlr8login',
 uuid = 'xlr8login@xlr8login'
 datadir = get_option('datadir')
 bindir = get_option('bindir')
+localstatedir = get_option('localstatedir')
 
 extension_dir = datadir / 'gnome-shell' / 'extensions' / uuid
 schema_dir = datadir / 'glib-2.0' / 'schemas'
@@ -35,6 +36,11 @@ install_data(
   'scripts/xlr8login-disable-gdm',
   install_dir: bindir,
   install_mode: 'rwxr-xr-x',
+)
+
+meson.add_install_script(
+  'sh', '-c',
+  'mkdir -p "$DESTDIR' + localstatedir + '/lib/xlr8login" && chmod 1777 "$DESTDIR' + localstatedir + '/lib/xlr8login"',
 )
 
 summary({

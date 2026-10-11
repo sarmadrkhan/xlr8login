@@ -7,3 +7,4 @@ _destdir/
 *.rpm
 *~
 *.swp
+.DS_Store
